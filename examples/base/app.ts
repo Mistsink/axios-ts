@@ -1,5 +1,5 @@
 /* tslint:disable */
-import axios from '../../src/index'
+import axios, { AxiosError } from '../../src/index'
 
 /**
  * base get url test
@@ -115,4 +115,18 @@ axios({
   }
 }).then(res => {
   console.log(res)
+})
+axios({
+  method: 'POST',
+  url: '/base/error',
+  responseType: 'json',
+  data: {
+    foo: 'bar'
+  }
+}).then(res => {
+  console.log(res)
+}).catch((e: AxiosError) => {
+  console.log(e.message)
+  console.log(e.config)
+  console.log(e.request)
 })
