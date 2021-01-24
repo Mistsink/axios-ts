@@ -88,6 +88,7 @@ axios({
  * test responseObject
  */
 
+/*
 axios({
   method: 'post',
   url: '/base/post',
@@ -130,17 +131,63 @@ axios({
   console.log(e.config)
   console.log(e.request)
 })
+*/
 
 // test generic(泛型)
-interface User {
-  name: string
-  age: number
-}
+// interface User {
+//   name: string
+//   age: number
+// }
+//
+// interface Result<T = any> {
+//   code: string,
+//   message: string,
+//   result: T
+// }
+//
+//
+// axios<Result<User>>('/base').then(({ data }) => data.result)
 
-interface Result<T = any> {
-  code: string,
-  message: string,
-  result: T
-}
 
-axios<Result<User>>('/base').then(({ data }) => data.result)
+// test interceptors
+axios.interceptors.request.use((config) => {
+  config.params = {
+    foo: 'bar',
+    ...config.params
+  }
+  console.log('foo: bar')
+  return config
+})
+
+const interceptor1 = axios.interceptors.request.use((config) => {
+  config.params = {
+    1: '1',
+    ...config.params
+  }
+  console.log('1')
+  return config
+})
+
+axios.interceptors.request.use((config) => {
+  config.params = {
+    2: '2',
+    ...config.params
+  }
+  console.log('2')
+  return config
+})
+
+axios.interceptors.request.ejected(interceptor1)
+
+axios.interceptors.response.use((res) => {
+  console.log('response interceptor')
+  return res
+})
+
+axios({
+  method: 'get',
+  url: '/hhh',
+  params: {
+    4: '4'
+  }
+})

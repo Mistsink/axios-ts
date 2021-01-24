@@ -51,6 +51,10 @@ router.post('/base/response-type', (req, res) => {
   res.json(req.body)
 })
 
+router.get('/hhh', (req, res) => {
+  res.json(req.query)
+})
+
 app.use(router)
 
 app.use(webpackDevMiddleware(compiler, {

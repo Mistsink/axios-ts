@@ -41,7 +41,6 @@ export function buildURL(url: string, params: any): string {
       values = [val]
     }
 
-    console.log('values: ', values)
     values.forEach(val => {
       if (isDate(val)) {
         val = val.toISOString()

@@ -1,4 +1,5 @@
 import { type } from 'os'
+import InterceptorManager from '../core/InterceptorManager'
 
 export type Method =
   | 'get'
@@ -49,6 +50,11 @@ export interface AxiosError extends Error {
  * 增强接口类型
  */
 export interface Axios {
+  interceptors: {
+    request: InterceptorManager<AxiosRequestConfig>
+    response: InterceptorManager<AxiosResponse>
+  }
+
   request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
   get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
@@ -71,4 +77,22 @@ export interface AxiosInstance extends Axios {
   函数重载
    */
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+}
+
+export interface AxiosInterceptorManager<T> {
+  /**
+   * 添加拦截器，返回的number是该拦截器的id，以便eject去销毁该拦截器
+   * @param resolved
+   * @param rejected
+   */
+  use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
+  eject(id: number): void
+}
+
+export interface ResolvedFn<T> {
+  (val: T): T | Promise<T>
+}
+
+export interface RejectedFn {
+  (error: any): any
 }
