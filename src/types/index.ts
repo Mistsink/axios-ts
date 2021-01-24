@@ -25,6 +25,11 @@ export interface AxiosRequestConfig {
   headers?: any
   responseType?: XMLHttpRequestResponseType
   timeout?: number
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
+
+  // 建立索引签名
+  [propName: string]: any
 }
 
 export interface AxiosResponse<T = any> {
@@ -50,9 +55,10 @@ export interface AxiosError extends Error {
  * 增强接口类型
  */
 export interface Axios {
+  defaults: AxiosRequestConfig
   interceptors: {
-    request: InterceptorManager<AxiosRequestConfig>
-    response: InterceptorManager<AxiosResponse>
+    request: AxiosInterceptorManager<AxiosRequestConfig>
+    response: AxiosInterceptorManager<AxiosResponse>
   }
 
   request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
@@ -79,6 +85,10 @@ export interface AxiosInstance extends Axios {
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
+export interface AxiosStatic extends AxiosInstance {
+  create(config?: AxiosRequestConfig): AxiosInstance
+}
+
 export interface AxiosInterceptorManager<T> {
   /**
    * 添加拦截器，返回的number是该拦截器的id，以便eject去销毁该拦截器
@@ -95,4 +105,8 @@ export interface ResolvedFn<T> {
 
 export interface RejectedFn {
   (error: any): any
+}
+
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
 }

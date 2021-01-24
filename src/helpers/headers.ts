@@ -1,4 +1,5 @@
-import { isPlainObject } from './util'
+import { deepMerge, isPlainObject } from './util'
+import { Method } from '../types'
 
 function normolizeHeadersName(headers: any, normolizeName: string): void {
   if (!headers) {
@@ -41,4 +42,20 @@ export function parseHeaders(headers: string): any {
   })
 
   return parsed
+}
+
+export function flattenHeaders(headers: any, method: Method): any {
+  if (!headers) {
+    return
+  }
+
+  headers = deepMerge(headers, headers.common, headers[method])
+
+  const propsToDelete = ['get', 'head', 'delete', 'options', 'post', 'put', 'patch']
+
+  propsToDelete.forEach(method => {
+    delete headers[method]
+  })
+
+  return headers
 }
