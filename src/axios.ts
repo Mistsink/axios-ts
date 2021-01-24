@@ -1,38 +1,19 @@
-import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from './types'
-import { buildURL } from './helpers/url'
-import xhr from './xhr'
-import { transformResponseData, transformRequest } from './helpers/data'
-import { processHeaders } from './helpers/headers'
+import { AxiosInstance } from './types'
+import Axios from './core/Axios'
+import { extend } from './helpers/util'
 
-function axios(config: AxiosRequestConfig): AxiosPromise {
-  processConfig(config)
-  return xhr(config).then(res => transformResponse(res))
+function createInstance(): AxiosInstance {
+  const context = new Axios()
+  const instance = Axios.prototype.request.bind(context)
+
+  /**
+   * 将Axios类实例上的方法复制给instance对象，那么instance就成了聚合方法的混合对象
+   */
+  extend(instance, context)
+
+  return instance as AxiosInstance
 }
 
-function processConfig(config: AxiosRequestConfig): void {
-  config.url = transformURL(config)
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
-}
-
-function transformURL(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  return buildURL(url, params)
-}
-
-function transformRequestData(config: AxiosRequestConfig): any {
-  const { data } = config
-  return transformRequest(data)
-}
-
-function transformHeaders(config: AxiosRequestConfig): any {
-  const { data, headers = {} } = config
-  return processHeaders(headers, data)
-}
-
-function transformResponse(res: AxiosResponse): any {
-  res.data = transformResponseData(res.data)
-  return res
-}
+const axios = createInstance()
 
 export default axios

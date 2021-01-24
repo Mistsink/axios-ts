@@ -130,3 +130,17 @@ axios({
   console.log(e.config)
   console.log(e.request)
 })
+
+// test generic(泛型)
+interface User {
+  name: string
+  age: number
+}
+
+interface Result<T = any> {
+  code: string,
+  message: string,
+  result: T
+}
+
+axios<Result<User>>('/base').then(({ data }) => data.result)
