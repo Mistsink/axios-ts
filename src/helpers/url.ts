@@ -1,8 +1,8 @@
-import { isDate, isObject } from './util'
+import { isDate, isPlainObject } from './util'
 
 /**
  * 常见字符编码
- * @param val
+ * @param val {string}
  */
 function encode(val: string): string {
   return encodeURIComponent(val)
@@ -28,7 +28,7 @@ export function buildURL(url: string, params: any): string {
     let val = params[key]
 
     if (val === null || val === undefined) {
-      // 注意这里的return并不会跳出forEach方法，只会跳出该次循环
+      // 注意: 这里的return并不会跳出forEach方法，只会跳出该次循环
       return
     }
 
@@ -41,11 +41,11 @@ export function buildURL(url: string, params: any): string {
       values = [val]
     }
 
-    console.log(values)
+    console.log('values: ', values)
     values.forEach(val => {
       if (isDate(val)) {
         val = val.toISOString()
-      } else if (isObject(val)) {
+      } else if (isPlainObject(val)) {
         val = JSON.stringify(val)
       }
       parts.push(`${encode(key)}=${encode(val)}`)

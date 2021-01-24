@@ -1,62 +1,118 @@
+/* tslint:disable */
 import axios from '../../src/index'
 
-axios({
-  method: 'get',
-  url: '/base/get',
-  params: {
-    foo: ['bar', 'baz']
-  }
-})
+/**
+ * base get url test
+ *
+ axios({
+    method: 'get',
+    url: '/base/get',
+    params: {
+      foo: ['bar', 'baz']
+    }
+  })
 
-axios({
-  method: 'get',
-  url: '/base/get',
-  params: {
-    foo: {
+ axios({
+    method: 'get',
+    url: '/base/get',
+    params: {
+      foo: {
+        bar: 'baz'
+      }
+    }
+  })
+
+ const date = new Date()
+
+ axios({
+    method: 'get',
+    url: '/base/get',
+    params: {
+      date
+    }
+  })
+
+ axios({
+    method: 'get',
+    url: '/base/get',
+    params: {
+      foo: '@:$, '
+    }
+  })
+
+ axios({
+    method: 'get',
+    url: '/base/get',
+    params: {
+      foo: 'bar',
+      baz: null
+    }
+  })
+
+ axios({
+    method: 'get',
+    url: '/base/get#hash',
+    params: {
+      foo: 'bar'
+    }
+  })
+
+ axios({
+    method: 'get',
+    url: '/base/get?foo=bar',
+    params: {
       bar: 'baz'
     }
-  }
-})
-
-const date = new Date()
-
-axios({
-  method: 'get',
-  url: '/base/get',
-  params: {
-    date
-  }
-})
+  })
+ */
+/*
+test post url
 
 axios({
-  method: 'get',
-  url: '/base/get',
-  params: {
-    foo: '@:$, '
+    method: 'POST',
+    url: '/base/post',
+    data: {
+      foo: 'bar'
+    }
   }
-})
+)
 
 axios({
-  method: 'get',
-  url: '/base/get',
-  params: {
-    foo: 'bar',
-    baz: null
-  }
+  method: 'POST',
+  url: '/base/buffer',
+  data: new Int32Array([1, 2, 3])
 })
+*/
+
+/**
+ * test responseObject
+ */
 
 axios({
-  method: 'get',
-  url: '/base/get#hash',
-  params: {
+  method: 'post',
+  url: '/base/post',
+  data: {
     foo: 'bar'
   }
 })
 
 axios({
-  method: 'get',
-  url: '/base/get?foo=bar',
-  params: {
-    bar: 'baz'
+  method: 'POST',
+  url: '/base/response',
+  data: {
+    foo: 'bar'
   }
+}).then(res => {
+  console.log(res)
+})
+
+axios({
+  method: 'POST',
+  url: '/base/response-type',
+  responseType: 'json',
+  data: {
+    foo: 'bar'
+  }
+}).then(res => {
+  console.log(res)
 })
